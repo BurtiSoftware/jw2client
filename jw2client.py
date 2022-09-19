@@ -37,7 +37,6 @@ class Jamworks:
         node_data_req = requests.get(url = info_url, headers = headers)
 
         node_data = node_data_req.json()
-        print(node_data)
         file = File()
         file.node_id  = node_data['node_id']
         file.tenant_id = node_data['tenant_id']
