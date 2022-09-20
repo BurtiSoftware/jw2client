@@ -31,6 +31,12 @@ Once the authorization is sucessfull, you can check the internal token atribute
 print(jw2.token)
 ```
 
+If you already have a valid authorization token, just set it to the Jamworks2 instance object
+
+```
+jw2.token = "TOKENSTRING"
+```
+
 ### Get a Contents File Info ###
 To get the file information about a Contents node_id just call the getContentsFileInfo method passing the id of the file node.
 
