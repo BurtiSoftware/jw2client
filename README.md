@@ -83,8 +83,8 @@ from wand.image import Image
 
 * Setting Application URLs and creating a Jamworks2 Instance
 ```
-JW2_CORE_URL = 'https://jamworks20-core.vati.rocks'
-JW2_CONTENT_URL = 'https://jamworks20-content.vati.rocks'
+JW2_CORE_URL = 'https://jamworks-core.vati.rocks'
+JW2_CONTENT_URL = 'https://jamworks-content.vati.rocks'
 jw2 = Jamworks(JW2_CORE_URL,JW2_CONTENT_URL)
 ```
 
