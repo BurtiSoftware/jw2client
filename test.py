@@ -6,8 +6,8 @@ import sys
 JW2_CORE_URL = 'https://jamworks20-core.vati.rocks'
 JW2_CONTENT_URL = 'https://jamworks20-content.vati.rocks'
 
-USER = 'celso.j@vati.rocks'
-PASS = 'burti9' 
+USER = sys.argv[2]
+PASS = sys.argv[3]
 
 jw2 = Jamworks(JW2_CORE_URL,JW2_CONTENT_URL)
 
