@@ -3,8 +3,8 @@ from wand.image import Image
 import sys
 
 
-JW2_CORE_URL = 'https://jamworks20-core.vati.rocks'
-JW2_CONTENT_URL = 'https://jamworks20-content.vati.rocks'
+JW2_CORE_URL = 'https://jamworks-core.vati.rocks'
+JW2_CONTENT_URL = 'https://jamworks-content.vati.rocks'
 
 USER = sys.argv[2]
 PASS = sys.argv[3]
