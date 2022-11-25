@@ -71,3 +71,12 @@ class Jamworks:
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
         r = response.json()
         return self.getContentsFileInfo(r['node_id'])
+
+
+    def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
+        #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
+        exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
+        headers = {'token': self.token}
+        response = requests.get(url=exportUrl,headers=headers)
+        return response.json()
+
