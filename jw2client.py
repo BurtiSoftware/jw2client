@@ -35,6 +35,8 @@ class Jamworks:
         headers = {"token":self.token}
 
         node_data_req = requests.get(url = info_url, headers = headers)
+        
+        print(node_data_req)
 
         node_data = node_data_req.json()
         file = File()
