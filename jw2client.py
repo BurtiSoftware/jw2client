@@ -43,14 +43,17 @@ class Jamworks:
         file.folder_parent_id = node_data['folder_parent_id']
         file.name = node_data['name']
         file.type = node_data['type']
-        file.mime = node_data['mime']
-        file.extension = node_data['extension']
         file.filesize = node_data['filesize']
         file.content_hash = node_data['content_hash']
+
+        if(file.type != 'folder'):
+            file.mime = node_data['mime']
+            file.extension = node_data['extension']
+
+            file.google_document_id = node_data['google_document_id']
         file.users_id = node_data['users_id']
         file.created_at = node_data['created_at']
         file.updated_at = node_data['updated_at']
-        file.google_document_id = node_data['google_document_id']
 
         return file
 
