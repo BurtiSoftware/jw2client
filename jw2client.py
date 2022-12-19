@@ -75,6 +75,7 @@ class Jamworks:
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
         r = response.json()
+        print(r)
         return self.getContentsFileInfo(r['node_id'])
 
 
