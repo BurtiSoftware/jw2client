@@ -28,6 +28,7 @@ class Jamworks:
         params = {'username':user,'password':password}
         response = requests.post(url=auth_url,data=params)
         ret = response.json()
+        print(ret)
         self.token = ret['token']
     
     def getContentsFileInfo(self,node_id):
@@ -75,7 +76,17 @@ class Jamworks:
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
         r = response.json()
+        print(r)
         return self.getContentsFileInfo(r['node_id'])
+    
+    def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
+        upload_url = self.content_url+"/rendition/upload/"+str(node_id)
+        headers = {'token': self.token}
+        data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
+        files = { "file":open(filename,"rb")}
+        response = requests.post(url = upload_url, headers=headers, files=files, data=data)
+        r = response.json()
+        return r
 
 
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
