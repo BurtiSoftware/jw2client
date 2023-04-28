@@ -79,6 +79,12 @@ class Jamworks:
         print(r)
         return self.getContentsFileInfo(r['node_id'])
     
+    def contentsInactivateRendition(self,relationship_type,node_type,node_id):
+        inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
+        headers = {'token':self.token}
+        response = requests.delete(url = inactivate_url, headers=headers)
+        r = response.json()
+        return r
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
         headers = {'token': self.token}
