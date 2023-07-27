@@ -82,7 +82,7 @@ class Jamworks:
 
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
-        headers = {'app-token': self.token}
+        headers = {'app-token': self.applicationToken}
         data = {"tenant_id":tenant_id,"folder_parent_id":parent_nodeid}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
@@ -99,7 +99,7 @@ class Jamworks:
 
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
-        headers = {'app-token': self.token}
+        headers = {'app-token': self.applicationToken}
         data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
@@ -109,7 +109,7 @@ class Jamworks:
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
         #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
-        headers = {'app-token': self.token}
+        headers = {'app-token': self.applicationToken}
         response = requests.get(url=exportUrl,headers=headers)
         return response.json()
 
