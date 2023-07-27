@@ -22,7 +22,8 @@ class Jamworks:
         self.core_url =  core_url
         self.content_url = content_url
         self.token = ''
-    
+        self.applicationToken = ''
+
     def auth(self,user,password):
         auth_url = self.core_url+"/auth/login"
         params = {'username':user,'password':password}
@@ -30,13 +31,23 @@ class Jamworks:
         ret = response.json()
         print(ret)
         self.token = ret['token']
-    
+        authApplication()
+
+    def authApplication(self)
+        if (self.token):
+            auth_url = self.core_url+"/_generate_app_token"
+            params = {'token':self.token}
+            response = requests.post(url=auth_url,data=params)
+            ret = response.json()
+            print(ret)
+            self.applicationToken = ret['token']
+
     def getContentsFileInfo(self,node_id):
         info_url = self.content_url+"/entry/"+str(node_id)
-        headers = {"token":self.token}
+        headers = {"app-token":self.applicationToken}
 
         node_data_req = requests.get(url = info_url, headers = headers)
-        
+
         print(node_data_req)
 
         node_data = node_data_req.json()
@@ -49,7 +60,7 @@ class Jamworks:
         file.filesize = node_data['filesize']
         file.content_hash = node_data['content_hash']
 
-        if(file.type != 'folder'):
+        if (file.type != 'folder'):
             file.mime = node_data['mime']
             file.extension = node_data['extension']
 
@@ -62,7 +73,7 @@ class Jamworks:
 
     def contentsDownloadFile(self,node_id,filename):
         download_url = self.content_url+"/actions/download/"+str(node_id)
-        headers = {"token":self.token}
+        headers = {"app-token":self.applicationToken}
         with requests.get(url = download_url, headers = headers , stream = True) as r:
             with open(filename,"wb") as f:
                 for chunk in r.iter_content(chunk_size = 16 * 1024):
@@ -71,34 +82,34 @@ class Jamworks:
 
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
-        headers = {'token': self.token}
+        headers = {'app-token': self.token}
         data = {"tenant_id":tenant_id,"folder_parent_id":parent_nodeid}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
         r = response.json()
         print(r)
         return self.getContentsFileInfo(r['node_id'])
-    
+
     def contentsInactivateRendition(self,relationship_type,node_type,node_id):
         inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
-        headers = {'token':self.token}
+        headers = {'app-token':self.applicationToken}
         response = requests.delete(url = inactivate_url, headers=headers)
         r = response.json()
         return r
+
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
-        headers = {'token': self.token}
+        headers = {'app-token': self.token}
         data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
         r = response.json()
         return r
 
-
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
         #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
-        headers = {'token': self.token}
+        headers = {'app-token': self.token}
         response = requests.get(url=exportUrl,headers=headers)
         return response.json()
 
