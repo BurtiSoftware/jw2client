@@ -1,5 +1,8 @@
 import requests
 import json
+import os
+from JwtService import JwtService, TokenNotFoundException
+from dotenv import load_dotenv
 
 class File:
     def __init__(self):
@@ -31,16 +34,7 @@ class Jamworks:
         ret = response.json()
         print(ret)
         self.token = ret['token']
-        authApplication()
-
-    def authApplication(self)
-        if (self.token):
-            auth_url = self.core_url+"/_generate_app_token"
-            params = {'token':self.token}
-            response = requests.post(url=auth_url,data=params)
-            ret = response.json()
-            print(ret)
-            self.applicationToken = ret['token']
+        self.applicationToken = self.authApplication()
 
     def getContentsFileInfo(self,node_id):
         info_url = self.content_url+"/entry/"+str(node_id)
@@ -113,3 +107,47 @@ class Jamworks:
         response = requests.get(url=exportUrl,headers=headers)
         return response.json()
 
+    def authApplication(self):
+        if (self.token):
+            payload = self.getPayload()
+            keys = self.getKeys()
+            JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
+            jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
+            applicationToken = jwt.generate_application_token(self.token)
+
+            return applicationToken
+        else:
+            raise TokenNotFoundException('No token provided')
+
+    def getPayload(self):
+            load_dotenv()
+            JWT_ISSUER = os.getenv('JWT_ISSUER')
+            JWT_AUDIENCE = os.getenv('JWT_AUDIENCE')
+            JWT_EXPIRATION = int(os.getenv('JWT_EXPIRATION'))
+
+            application_instance_id = int(os.getenv('application_instance_id'))
+            application_id = int(os.getenv('application_id'))
+            application_instance_title = os.getenv('application_instance_title')
+            access_url = os.getenv('access_url')
+
+            applicationData = {
+                'application_instance_id': application_instance_id,
+                'application_id': application_id,
+                'application_instance_title': application_instance_title,
+                'access_url': access_url
+            }
+
+            payload = {'iss': JWT_ISSUER, 'aud': JWT_AUDIENCE, 'data': applicationData}
+
+            return payload
+
+    def getKeys(self):
+        private = os.getenv('priv_key_path');
+        with open(private, "rb") as pem_file:
+            JWT_PRIVATE_KEY = pem_file.read()
+
+        public = os.getenv('pub_key_path');
+        with open(public, "rb") as pem_file:
+            JWT_PUBLIC_KEY = pem_file.read()
+
+        return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
