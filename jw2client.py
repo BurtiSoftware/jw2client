@@ -111,6 +111,7 @@ class Jamworks:
             payload = self.getPayload()
             keys = self.getKeys()
             JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
+            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
             jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
             applicationToken = jwt.generate_application_token(self.token)
 
