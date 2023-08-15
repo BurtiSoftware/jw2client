@@ -141,11 +141,17 @@ class Jamworks:
 
     def getKeys(self):
         private = os.environ['priv_key_path']
-        with open(private, "rb") as pem_file:
-            JWT_PRIVATE_KEY = pem_file.read()
+        if not os.path.exists(private):
+            JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
+        else:
+            with open(private, "rb") as pem_file:
+                JWT_PRIVATE_KEY = pem_file.read()
 
         public = os.environ['pub_key_path']
-        with open(public, "rb") as pem_file:
-            JWT_PUBLIC_KEY = pem_file.read()
+        if not os.path.exists(public):
+            JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY']
+        else:
+            with open(public, "rb") as pem_file:
+                JWT_PUBLIC_KEY = pem_file.read()
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
