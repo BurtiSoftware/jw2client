@@ -121,14 +121,14 @@ class Jamworks:
 
     def getPayload(self):
             load_dotenv()
-            JWT_ISSUER = os.getenv('JWT_ISSUER')
-            JWT_AUDIENCE = os.getenv('JWT_AUDIENCE')
-            JWT_EXPIRATION = int(os.getenv('JWT_EXPIRATION'))
+            JWT_ISSUER = os.environ['JWT_ISSUER']
+            JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
+            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
 
-            application_instance_id = int(os.getenv('application_instance_id'))
-            application_id = int(os.getenv('application_id'))
-            application_instance_title = os.getenv('application_instance_title')
-            access_url = os.getenv('access_url')
+            application_instance_id = int(os.environ['application_instance_id'])
+            application_id = int(os.environ['application_id'])
+            application_instance_title = os.environ['application_instance_title']
+            access_url = os.environ['access_url']
 
             applicationData = {
                 'application_instance_id': application_instance_id,
