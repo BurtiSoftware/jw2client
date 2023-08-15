@@ -2,7 +2,6 @@ import requests
 import json
 import os
 from JwtService import JwtService, TokenNotFoundException
-from dotenv import load_dotenv
 
 class File:
     def __init__(self):
@@ -120,7 +119,6 @@ class Jamworks:
             raise TokenNotFoundException('No token provided')
 
     def getPayload(self):
-            load_dotenv()
             JWT_ISSUER = os.environ['JWT_ISSUER']
             JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
             JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
@@ -142,11 +140,11 @@ class Jamworks:
             return payload
 
     def getKeys(self):
-        private = os.getenv('priv_key_path');
+        private = os.environ['priv_key_path']
         with open(private, "rb") as pem_file:
             JWT_PRIVATE_KEY = pem_file.read()
 
-        public = os.getenv('pub_key_path');
+        public = os.environ['pub_key_path']
         with open(public, "rb") as pem_file:
             JWT_PUBLIC_KEY = pem_file.read()
 
