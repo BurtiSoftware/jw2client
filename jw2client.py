@@ -2,7 +2,6 @@ import requests
 import json
 import os
 from JwtService import JwtService, TokenNotFoundException
-from dotenv import load_dotenv
 
 class File:
     def __init__(self):
@@ -112,6 +111,7 @@ class Jamworks:
             payload = self.getPayload()
             keys = self.getKeys()
             JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
+            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
             jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
             applicationToken = jwt.generate_application_token(self.token)
 
@@ -120,15 +120,14 @@ class Jamworks:
             raise TokenNotFoundException('No token provided')
 
     def getPayload(self):
-            load_dotenv()
-            JWT_ISSUER = os.getenv('JWT_ISSUER')
-            JWT_AUDIENCE = os.getenv('JWT_AUDIENCE')
-            JWT_EXPIRATION = int(os.getenv('JWT_EXPIRATION'))
+            JWT_ISSUER = os.environ['JWT_ISSUER']
+            JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
+            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
 
-            application_instance_id = int(os.getenv('application_instance_id'))
-            application_id = int(os.getenv('application_id'))
-            application_instance_title = os.getenv('application_instance_title')
-            access_url = os.getenv('access_url')
+            application_instance_id = int(os.environ['application_instance_id'])
+            application_id = int(os.environ['application_id'])
+            application_instance_title = os.environ['application_instance_title']
+            access_url = os.environ['access_url']
 
             applicationData = {
                 'application_instance_id': application_instance_id,
@@ -142,12 +141,7 @@ class Jamworks:
             return payload
 
     def getKeys(self):
-        private = os.getenv('priv_key_path');
-        with open(private, "rb") as pem_file:
-            JWT_PRIVATE_KEY = pem_file.read()
-
-        public = os.getenv('pub_key_path');
-        with open(public, "rb") as pem_file:
-            JWT_PUBLIC_KEY = pem_file.read()
+        JWT_PRIVATE_KEY = os.environ['priv_key_path']
+        JWT_PUBLIC_KEY = os.environ['pub_key_path']
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
