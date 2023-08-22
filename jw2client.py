@@ -50,6 +50,7 @@ class Jamworks:
         node_data = node_data_req.json()
 
         print(node_data)
+        print("line 53")
 
         file = File()
         file.node_id  = node_data['node_id']
