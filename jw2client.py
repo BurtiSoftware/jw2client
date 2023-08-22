@@ -39,11 +39,16 @@ class Jamworks:
         info_url = self.content_url+"/entry/"+str(node_id)
         headers = {"app-token":self.applicationToken}
 
+        print (self.applicationToken)
+
         node_data_req = requests.get(url = info_url, headers = headers)
 
         print(node_data_req)
 
         node_data = node_data_req.json()
+
+        print(node_data)
+
         file = File()
         file.node_id  = node_data['node_id']
         file.tenant_id = node_data['tenant_id']
