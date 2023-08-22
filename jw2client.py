@@ -34,12 +34,14 @@ class Jamworks:
         print(ret)
         self.token = ret['token']
         self.applicationToken = self.authApplication()
+        print(self.applicationToken)
+        print("linha 38")
 
     def getContentsFileInfo(self,node_id):
         info_url = self.content_url+"/entry/"+str(node_id)
         headers = {"app-token":self.applicationToken}
 
-        print (self.applicationToken)
+        print(self.applicationToken)
 
         node_data_req = requests.get(url = info_url, headers = headers)
 
