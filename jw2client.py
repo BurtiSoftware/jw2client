@@ -31,26 +31,15 @@ class Jamworks:
         params = {'username':user,'password':password}
         response = requests.post(url=auth_url,data=params)
         ret = response.json()
-        print(ret)
         self.token = ret['token']
         self.applicationToken = self.authApplication()
-        print(self.applicationToken)
-        print("linha 38")
 
     def getContentsFileInfo(self,node_id):
         info_url = self.content_url+"/entry/"+str(node_id)
         headers = {"app-token":self.applicationToken}
 
-        print(self.applicationToken)
-
         node_data_req = requests.get(url = info_url, headers = headers)
-
-        print(node_data_req)
-
         node_data = node_data_req.json()
-
-        print(node_data)
-        print("line 53")
 
         file = File()
         file.node_id  = node_data['node_id']
