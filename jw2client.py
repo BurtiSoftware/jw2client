@@ -69,7 +69,12 @@ class Jamworks:
                 for chunk in r.iter_content(chunk_size = 16 * 1024):
                     f.write(chunk)
 
-
+    def contentsList(self,node_id):
+        requestUrl = self.content_url+"/entry/list/"+str(node_id)
+        headers = {'app-token': self.applicationToken}
+        response = requests.get(url=requestUrl,headers=headers)
+        return response.json()
+ 
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
         headers = {'app-token': self.applicationToken}
