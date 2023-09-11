@@ -36,7 +36,10 @@ class Jamworks:
 
     def getContentsFileInfo(self,node_id):
         info_url = self.content_url+"/entry/"+str(node_id)
-        headers = {"app-token":self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
 
         node_data_req = requests.get(url = info_url, headers = headers)
         node_data = node_data_req.json()
@@ -63,7 +66,10 @@ class Jamworks:
 
     def contentsDownloadFile(self,node_id,filename):
         download_url = self.content_url+"/actions/download/"+str(node_id)
-        headers = {"app-token":self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         with requests.get(url = download_url, headers = headers , stream = True) as r:
             with open(filename,"wb") as f:
                 for chunk in r.iter_content(chunk_size = 16 * 1024):
@@ -71,13 +77,19 @@ class Jamworks:
 
     def contentsList(self,node_id):
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
-        headers = {'app-token': self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         response = requests.get(url=requestUrl,headers=headers)
         return response.json()
  
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
-        headers = {'app-token': self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         data = {"tenant_id":tenant_id,"folder_parent_id":parent_nodeid}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
@@ -87,14 +99,20 @@ class Jamworks:
 
     def contentsInactivateRendition(self,relationship_type,node_type,node_id):
         inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
-        headers = {'app-token':self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         response = requests.delete(url = inactivate_url, headers=headers)
         r = response.json()
         return r
 
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
-        headers = {'app-token': self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=headers, files=files, data=data)
@@ -104,7 +122,10 @@ class Jamworks:
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
         #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
-        headers = {'app-token': self.applicationToken}
+        if not self.token:
+            headers = {"token":self.token}
+        else:
+            headers = {"app-token":self.applicationToken}
         response = requests.get(url=exportUrl,headers=headers)
         return response.json()
 
