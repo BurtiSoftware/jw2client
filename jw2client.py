@@ -66,7 +66,7 @@ class Jamworks:
 
     def contentsDownloadFile(self,node_id,filename):
         download_url = self.content_url+"/actions/download/"+str(node_id)
-        if not self.token:
+        if self.token:
             headers = {"token":self.token}
         else:
             headers = {"app-token":self.applicationToken}
@@ -77,7 +77,7 @@ class Jamworks:
 
     def contentsList(self,node_id):
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
-        if not self.token:
+        if self.token:
             headers = {"token":self.token}
         else:
             headers = {"app-token":self.applicationToken}
@@ -86,7 +86,7 @@ class Jamworks:
  
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
-        if not self.token:
+        if self.token:
             headers = {"token":self.token}
         else:
             headers = {"app-token":self.applicationToken}
@@ -99,7 +99,7 @@ class Jamworks:
 
     def contentsInactivateRendition(self,relationship_type,node_type,node_id):
         inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
-        if not self.token:
+        if self.token:
             headers = {"token":self.token}
         else:
             headers = {"app-token":self.applicationToken}
@@ -109,7 +109,7 @@ class Jamworks:
 
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
-        if not self.token:
+        if self.token:
             headers = {"token":self.token}
         else:
             headers = {"app-token":self.applicationToken}
