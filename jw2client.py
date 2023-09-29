@@ -77,7 +77,7 @@ class Jamworks:
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
         return response.json()
- 
+
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
         data = {"tenant_id":tenant_id,"folder_parent_id":parent_nodeid}
@@ -118,12 +118,11 @@ class Jamworks:
 
             return applicationToken
         else:
-            raise TokenNotFoundException('No token provided')
+            raise TokenNotFoundException('Could not generate application token.')
 
     def getPayload(self):
             JWT_ISSUER = os.environ['JWT_ISSUER']
             JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
-            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
 
             application_instance_id = int(os.environ['application_instance_id'])
             application_id = int(os.environ['application_id'])
