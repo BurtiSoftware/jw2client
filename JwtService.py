@@ -1,5 +1,4 @@
 import jwt
-import json
 from datetime import datetime, timedelta
 
 class JwtService:
@@ -16,6 +15,3 @@ class JwtService:
         token = jwt.encode(payload_data, self.private_key, algorithm='RS256')
 
         return token
-
-class TokenNotFoundException(Exception):
-    pass

@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-from JwtService import JwtService, TokenNotFoundException
+from JwtService import JwtService
 
 class File:
     def __init__(self):
