@@ -1,6 +1,5 @@
 import jwt
 import json
-from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError, InvalidTokenError
 from datetime import datetime, timedelta
 
 class JwtService:
@@ -19,7 +18,4 @@ class JwtService:
         return token
 
 class TokenNotFoundException(Exception):
-    pass
-
-class TokenCorruptedException(Exception):
     pass

@@ -108,40 +108,37 @@ class Jamworks:
         return response.json()
 
     def authApplication(self):
-        if (self.token):
-            payload = self.getPayload()
-            keys = self.getKeys()
-            JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
-            JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
-            jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
-            applicationToken = jwt.generate_application_token(self.token)
+        payload = self.getPayload()
+        keys = self.getKeys()
+        JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
+        JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
+        jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
+        applicationToken = jwt.generate_application_token()
 
-            return applicationToken
-        else:
-            raise TokenNotFoundException('Could not generate application token.')
+        return applicationToken
 
     def getPayload(self):
-            JWT_ISSUER = os.environ['JWT_ISSUER']
-            JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
+        JWT_ISSUER = os.environ['JWT_ISSUER']
+        JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
 
-            application_instance_id = int(os.environ['application_instance_id'])
-            application_id = int(os.environ['application_id'])
-            application_instance_title = os.environ['application_instance_title']
-            access_url = os.environ['access_url']
+        application_instance_id = int(os.environ['application_instance_id'])
+        application_id = int(os.environ['application_id'])
+        application_instance_title = os.environ['application_instance_title']
+        access_url = os.environ['access_url']
 
-            applicationData = {
-                'application_instance_id': application_instance_id,
-                'application_id': application_id,
-                'application_instance_title': application_instance_title,
-                'access_url': access_url
-            }
+        applicationData = {
+            'application_instance_id': application_instance_id,
+            'application_id': application_id,
+            'application_instance_title': application_instance_title,
+            'access_url': access_url
+        }
 
-            payload = {'iss': JWT_ISSUER, 'aud': JWT_AUDIENCE, 'data': applicationData}
+        payload = {'iss': JWT_ISSUER, 'aud': JWT_AUDIENCE, 'data': applicationData}
 
-            return payload
+        return payload
 
     def getKeys(self):
-        JWT_PRIVATE_KEY = os.environ['priv_key_path']
-        JWT_PUBLIC_KEY = os.environ['pub_key_path']
+        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
+        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY']
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY

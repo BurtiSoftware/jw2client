@@ -2,8 +2,8 @@ from JwtService import JwtService
 import os
 
 
-JWT_PRIVATE_KEY = os.environ['priv_key_path']
-JWT_PUBLIC_KEY =os.environ['pub_key_path']
+JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
+JWT_PUBLIC_KEY =os.environ['JWT_PUBLIC_KEY']
 JWT_ISSUER = os.environ['JWT_ISSUER']
 JWT_AUDIENCE = os.environ['JWT_AUDIENCE']
 JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
