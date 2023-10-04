@@ -26,12 +26,7 @@ class Jamworks:
         self.token = ''
         self.applicationToken = ''
 
-    def auth(self,user,password):
-        auth_url = self.core_url+"/auth/login"
-        params = {'username':user,'password':password}
-        response = requests.post(url=auth_url,data=params)
-        ret = response.json()
-        self.token = ret['token']
+    def auth(self):
         self.applicationToken = self.authApplication()
 
     def getCorrectToken(self):
