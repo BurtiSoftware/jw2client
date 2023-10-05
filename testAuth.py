@@ -1,4 +1,5 @@
 from JwtService import JwtService
+from jw2client import *
 import os
 
 
@@ -22,9 +23,22 @@ applicationData = {
 
 payload = {'iss': JWT_ISSUER, 'aud': JWT_AUDIENCE, 'data': applicationData}
 
+payload['data'].update({'auth_user': {'users_id': 1}})
 jwt = JwtService(JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, payload, JWT_EXPIRATION)
+
 applicationToken = jwt.generate_application_token()
 
 print("TOKEN")
 
 print(applicationToken)
+
+
+
+JW2_CORE_URL="http://core_api"
+JW2_CONTENT_URL="http://content_api"
+
+jw2 = Jamworks(JW2_CORE_URL, JW2_CONTENT_URL)
+
+jw2.auth({'auth_user': {'users_id': 1}})
+print("JW2 TOKEN:")
+print(jw2.applicationToken)

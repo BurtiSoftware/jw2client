@@ -26,8 +26,8 @@ class Jamworks:
         self.token = ''
         self.applicationToken = ''
 
-    def auth(self):
-        self.applicationToken = self.authApplication()
+    def auth(self, params=None):
+        self.applicationToken = self.authApplication(params)
 
     def getCorrectToken(self):
         if not self.applicationToken:
@@ -102,8 +102,10 @@ class Jamworks:
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
         return response.json()
 
-    def authApplication(self):
+    def authApplication(self, params=None):
         payload = self.getPayload()
+        if (params):
+            payload['data'].update(params)
         keys = self.getKeys()
         JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = keys
         JWT_EXPIRATION = int(os.environ['JWT_EXPIRATION'])
