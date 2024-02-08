@@ -135,7 +135,7 @@ class Jamworks:
         return payload
 
     def getKeys(self):
-        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
-        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY']
+        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY'].replace(r'\n', '\n')
+        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY'].replace(r'\n', '\n')
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
