@@ -102,6 +102,17 @@ class Jamworks:
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
         return response.json()
 
+    def contentsUploadGdocs(self, tenant_id, parent_nodeid, filename):
+        upload_url = f"{self.content_url}/file/gdocs"
+        data = {"tenant_id": tenant_id, "folder_parent_id": parent_nodeid}
+        files = {"file": open(filename,"rb")}
+
+        response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
+
+        r = response.json()
+
+        return self.getContentsFileInfo(r['node_id'])
+
     def authApplication(self, params=None):
         payload = self.getPayload()
         if (params):
