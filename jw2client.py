@@ -102,6 +102,17 @@ class Jamworks:
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
         return response.json()
 
+    def contentsUploadGdocs(self, tenant_id, parent_nodeid, filename):
+        upload_url = f"{self.content_url}/file/gdocs"
+        data = {"tenant_id": tenant_id, "folder_parent_id": parent_nodeid}
+        files = {"file": open(filename,"rb")}
+
+        response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
+
+        r = response.json()
+
+        return self.getContentsFileInfo(r['node_id'])
+
     def coreListAppInstance(self):
         """List all application instances from core API."""
         requestUrl = self.core_url+"/application_instance"
@@ -141,7 +152,7 @@ class Jamworks:
         return payload
 
     def getKeys(self):
-        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
-        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY']
+        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY'].replace(r'\n', '\n')
+        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY'].replace(r'\n', '\n')
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
