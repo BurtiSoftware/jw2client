@@ -113,6 +113,12 @@ class Jamworks:
 
         return self.getContentsFileInfo(r['node_id'])
 
+    def coreListAppInstance(self):
+        """List all application instances from core API."""
+        requestUrl = self.core_url+"/application_instance"
+        response = requests.get(url=requestUrl,headers=self.getCorrectToken())
+        return response.json()
+
     def authApplication(self, params=None):
         payload = self.getPayload()
         if (params):
