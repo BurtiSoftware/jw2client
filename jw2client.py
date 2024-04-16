@@ -68,6 +68,12 @@ class Jamworks:
                 for chunk in r.iter_content(chunk_size = 16 * 1024):
                     f.write(chunk)
 
+    def downloadFileFromUrl(self, url, filename):
+        with requests.get(url, stream=True) as r:
+            with open(filename, "wb") as f:
+                for chunk in r.iter_content(chunk_size=16 * 1024):
+                    f.write(chunk)
+
     def contentsList(self,node_id):
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
@@ -88,19 +94,52 @@ class Jamworks:
         r = response.json()
         return r
 
-    def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
+    def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index, custom_destination_suffix = None):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
-        data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
+
+        data = {
+            "relationship_type": relationship_type,
+            "node_type": node_type,
+            "item_index": item_index,
+            "custom_destination_suffix": custom_destination_suffix
+        }
+
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
         r = response.json()
+
         return r
+
+    def contentsDownloadRenditionFile(self,node_id,filename):
+        download_url = self.content_url+"/rendition/download/"+str(node_id)
+        with requests.get(url = download_url, headers = self.getCorrectToken(), stream = True) as r:
+            with open(filename,"wb") as f:
+                for chunk in r.iter_content(chunk_size = 16 * 1024):
+                    f.write(chunk)
+
+    def contentsGetPreviewUrls(self, node_id):
+        download_url = self.content_url+"/rendition/preview/"+str(node_id)
+
+        response = requests.get(url = download_url, headers = self.getCorrectToken())
+
+        return response.json()
 
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
         #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
         return response.json()
+
+    def contentsUploadGdocs(self, tenant_id, parent_nodeid, filename):
+        upload_url = f"{self.content_url}/file/gdocs"
+        data = {"tenant_id": tenant_id, "folder_parent_id": parent_nodeid}
+        files = {"file": open(filename,"rb")}
+
+        response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
+
+        r = response.json()
+
+        return self.getContentsFileInfo(r['node_id'])
 
     def coreListAppInstance(self):
         """List all application instances from core API."""
@@ -141,7 +180,7 @@ class Jamworks:
         return payload
 
     def getKeys(self):
-        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY']
-        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY']
+        JWT_PRIVATE_KEY = os.environ['JWT_PRIVATE_KEY'].replace(r'\n', '\n')
+        JWT_PUBLIC_KEY = os.environ['JWT_PUBLIC_KEY'].replace(r'\n', '\n')
 
         return JWT_PRIVATE_KEY, JWT_PUBLIC_KEY
