@@ -110,6 +110,13 @@ class Jamworks:
 
         return r
 
+    def contentsDownloadRenditionFile(self,node_id,filename):
+        download_url = self.content_url+"/rendition/download/"+str(node_id)
+        with requests.get(url = download_url, headers = self.getCorrectToken(), stream = True) as r:
+            with open(filename,"wb") as f:
+                for chunk in r.iter_content(chunk_size = 16 * 1024):
+                    f.write(chunk)
+
     def contentsGetPreviewUrls(self, node_id):
         download_url = self.content_url+"/rendition/preview/"+str(node_id)
 
