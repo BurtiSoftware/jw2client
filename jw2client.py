@@ -141,6 +141,13 @@ class Jamworks:
 
         return self.getContentsFileInfo(r['node_id'])
 
+    def contentsUpdateNode(self, node_id, data):
+        update_url = self.content_url + "/app/node/" + str(node_id)
+
+        response = requests.put(url=update_url, headers=self.getCorrectToken(), json=data)
+
+        return response
+
     def coreListAppInstance(self):
         """List all application instances from core API."""
         requestUrl = self.core_url+"/application_instance"
