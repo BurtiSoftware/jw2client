@@ -40,6 +40,8 @@ class Jamworks:
 
         node_data_req = requests.get(url = info_url, headers = self.getCorrectToken())
         node_data = node_data_req.json()
+        if 'message' in node_data:
+            raise Exception(node_data['message'])
 
         file = File()
         file.node_id  = node_data['node_id']
@@ -53,8 +55,8 @@ class Jamworks:
         if (file.type != 'folder'):
             file.mime = node_data['mime']
             file.extension = node_data['extension']
-
             file.google_document_id = node_data['google_document_id']
+
         file.users_id = node_data['users_id']
         file.created_at = node_data['created_at']
         file.updated_at = node_data['updated_at']
@@ -71,42 +73,55 @@ class Jamworks:
     def contentsList(self,node_id):
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
-        return response.json()
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def contentsUploadFile(self,tenant_id,parent_nodeid,filename):
         upload_url = self.content_url+"/file"
         data = {"tenant_id":tenant_id,"folder_parent_id":parent_nodeid}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
-        r = response.json()
-        print(r)
-        return self.getContentsFileInfo(r['node_id'])
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return self.getContentsFileInfo(data['node_id'])
 
     def contentsInactivateRendition(self,relationship_type,node_type,node_id):
         inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
         response = requests.delete(url = inactivate_url, headers=self.getCorrectToken())
-        r = response.json()
-        return r
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def contentsUploadRendition(self,relationship_type,node_type,node_id,filename,item_index):
         upload_url = self.content_url+"/rendition/upload/"+str(node_id)
         data = {"relationship_type":relationship_type,"node_type":node_type,"item_index":item_index}
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
-        r = response.json()
-        return r
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
-        #exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+skip
-        exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?format="+format+"&sheet_name="+sheetName+"&skip="+str(skip)
+        exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+str(skip)
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
-        return response.json()
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def coreListAppInstance(self):
         """List all application instances from core API."""
         requestUrl = self.core_url+"/application_instance"
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
-        return response.json()
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def authApplication(self, params=None):
         payload = self.getPayload()
