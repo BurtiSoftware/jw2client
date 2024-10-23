@@ -40,7 +40,7 @@ class Jamworks:
 
         node_data_req = requests.get(url = info_url, headers = self.getCorrectToken())
         node_data = node_data_req.json()
-        if 'message' in node_data:
+        if 'message' in node_data and len(node_data) == 1:
             raise Exception(node_data['message'])
 
         file = File()
@@ -80,7 +80,7 @@ class Jamworks:
         requestUrl = self.content_url+"/entry/list/"+str(node_id)
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
@@ -90,7 +90,7 @@ class Jamworks:
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return self.getContentsFileInfo(data['node_id'])
 
@@ -98,7 +98,7 @@ class Jamworks:
         inactivate_url = self.content_url+"/rendition/inactivate/"+str(node_id)+"?filters[relationship_type]="+relationship_type+"&filters[active]=1&filters[node_type]="+node_type
         response = requests.delete(url = inactivate_url, headers=self.getCorrectToken())
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
@@ -115,7 +115,7 @@ class Jamworks:
         files = { "file":open(filename,"rb")}
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
@@ -131,7 +131,7 @@ class Jamworks:
 
         response = requests.get(url = download_url, headers = self.getCorrectToken())
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
@@ -139,7 +139,7 @@ class Jamworks:
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+str(skip)
         response = requests.get(url=exportUrl,headers=self.getCorrectToken())
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
@@ -151,7 +151,7 @@ class Jamworks:
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
 
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
 
         return self.getContentsFileInfo(data['node_id'])
@@ -162,7 +162,7 @@ class Jamworks:
         response = requests.put(url=update_url, headers=self.getCorrectToken(), json=data)
 
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
 
         return response
@@ -172,7 +172,7 @@ class Jamworks:
         requestUrl = self.core_url+"/application_instance"
         response = requests.get(url=requestUrl,headers=self.getCorrectToken())
         data = response.json()
-        if 'message' in data:
+        if 'message' in data and len(data) == 1:
             raise Exception(data['message'])
         return data
 
