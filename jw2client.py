@@ -130,8 +130,10 @@ class Jamworks:
         download_url = self.content_url+"/rendition/preview/"+str(node_id)
 
         response = requests.get(url = download_url, headers = self.getCorrectToken())
-
-        return response.json()
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
+        return data
 
     def contentsExportSheet(self,nodeid,sheetName='',format='json',skip=0):
         exportUrl = self.content_url+"/file/"+str(nodeid)+"/export?sheet_name="+sheetName+"&format="+format+"&skip="+str(skip)
@@ -148,14 +150,20 @@ class Jamworks:
 
         response = requests.post(url = upload_url, headers=self.getCorrectToken(), files=files, data=data)
 
-        r = response.json()
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
 
-        return self.getContentsFileInfo(r['node_id'])
+        return self.getContentsFileInfo(data['node_id'])
 
     def contentsUpdateNode(self, node_id, data):
         update_url = self.content_url + "/app/node/" + str(node_id)
 
         response = requests.put(url=update_url, headers=self.getCorrectToken(), json=data)
+
+        data = response.json()
+        if 'message' in data:
+            raise Exception(data['message'])
 
         return response
 
