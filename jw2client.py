@@ -209,6 +209,19 @@ class Jamworks:
 
         return response
 
+    def contentsRename(self, node_id, filename):
+        update_url = self.content_url + "/entry/rename/" + str(node_id)
+
+        response = requests.put(
+            url=update_url, headers=self.getCorrectToken(), json={"name": filename}, timeout=20
+        )
+
+        data = response.json()
+        if 'message' in data and len(data) == 1:
+            raise Exception(data['message'])
+
+        return response
+
     def coreListAppInstance(self):
         """List all application instances from core API."""
         requestUrl = self.core_url + "/application_instance"
