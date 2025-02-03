@@ -142,8 +142,6 @@ class Jamworks:
             raise Exception(data['message'])
         return data
 
-        return r
-
     def contentsDownloadRenditionFile(self, node_id, filename):
         download_url = self.content_url + "/rendition/download/" + str(node_id)
         with requests.get(
